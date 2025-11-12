@@ -40,7 +40,7 @@ const w = {
     "api-whatsapp": "https://api-whatsapp.wascript.com.br"
   },
   // Url do painel de gestão
-  painel_Gestor: "https://whacrm-master.miquecrm.com",
+  painel_Gestor: "https://catalogo.alwaysdata.net/",
   // Url do audio transcriber
   audio_transcriber: "https://audio-transcriber.wascript.com.br/transcription",
   // Selector de elementos DOM
