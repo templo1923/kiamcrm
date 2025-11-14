@@ -50,7 +50,7 @@ if ($login == 1) {
         <div class="grid grid-cols-1 md:grid-cols-2 max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
             
             <div class="hidden md:flex flex-col items-center justify-center p-12 bg-green-50">
-                <img src="images/slider_images/KiamberCRM.jpg<?= $slider_img_1; ?>" 
+                <img src="https://fil-e.b-cdn.net/Im%C3%A1genes/crm/Mique%20CRM%20Whatsapp.png" 
                      alt="Ilustración de CRM" class="w-full h-auto object-cover">
                 <h2 class="mt-6 text-2xl font-bold text-gray-700 text-center">Gestiona tus chats de forma eficiente</h2>
                 <p class="mt-2 text-gray-500 text-center">Tu solución CRM para WhatsApp todo en uno.</p>
@@ -102,7 +102,7 @@ if ($login == 1) {
                     <div class="text-center text-sm pt-4">
                         <a href="<?= $external_link; ?>" target="_blank" class="text-gray-600 hover:text-gray-900 mx-2 transition-colors">Más Programas</a>
                         <span class="text-gray-300">|</span>
-                        <a href="https://api.whatsapp.com/send?phone=<?= $supportPhoneNumber; ?>&text=Hola,+me+gustaría+conversar+sobre+el+CRM+de+WhatsApp." target="_blank" class="text-gray-600 hover:text-gray-900 mx-2 transition-colors">Chatear en WhatsApp</a>
+                        <a href="https://api.whatsapp.com/send?phone=<?= $supportPhoneNumber; ?>&text=Hola,+me+gustaría+poder+hablar+sobre+el+CRM+de+WhatsApp." target="_blank" class="text-gray-600 hover:text-gray-900 mx-2 transition-colors">Chatear en WhatsApp</a>
                     </div>
                 </form>
             </div>
