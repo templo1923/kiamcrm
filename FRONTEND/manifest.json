@@ -14,15 +14,17 @@
    "icons": {
       "128": "label/icons/icon.png"
    },
+   
    "manifest_version": 3,
    "name": "KiamberCRM PRO",
    "permissions": [ "unlimitedStorage", "storage", "alarms", "tabs" ],
+   
    "host_permissions": [
       "https://web.whatsapp.com/*",
-      "https://*.wascript.com.br/*",
+      "https://*.wascript.com.br/*", 
       "https://catalogo.alwaysdata.net/*"
    ],
-   "update_url": "https://clients2.google.com/service/update2/crx",
+
    "version": "7.4.2.14",
    "web_accessible_resources": [ {
       "matches": [ "https://web.whatsapp.com/*" ],
