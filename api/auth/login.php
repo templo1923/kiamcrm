@@ -8,8 +8,6 @@ header('Content-Type: application/json');
 // Database connection
 include('../../include/conn.php');
 
-
-
 // Get raw POST data
 $rawData = file_get_contents("php://input");
 $data = json_decode($rawData, true);
@@ -24,8 +22,8 @@ if (!isset($data['email'], $data['senha'], $data['chromeStoreID'])) {
     exit;
 }
 
-$email        = $data['email'];
-$password     = sha1($data['senha']); // make sure DB bhi sha1 use karta ho
+$email         = $data['email'];
+$plain_password = $data['senha']; // Almacenamos la contraseña en texto plano para verificación segura
 $chromeStoreID = $data['chromeStoreID'];
 
 // Database check
@@ -55,8 +53,11 @@ if ($result->num_rows !== 1) {
 
 $user = $result->fetch_assoc();
 
-// Verify password
-if ($password !== $user['password']) {
+// INICIO DE LA CORRECCIÓN DE SEGURIDAD CRÍTICA
+
+// Verify password securely using password_verify()
+if (!password_verify($plain_password, $user['password'])) {
+    // Si la verificación falla, salimos.
     echo json_encode([
         "success" => false,
         "message" => "Incorrect password",
@@ -64,6 +65,8 @@ if ($password !== $user['password']) {
     ]);
     exit;
 }
+
+// FIN DE LA CORRECCIÓN DE SEGURIDAD CRÍTICA
 
 // Check expiry
 $today = date('Y-m-d');
@@ -130,9 +133,6 @@ $response = [
 ];
 
 $jsonResponse = json_encode($response, JSON_PRETTY_PRINT);
-
-// log request & response
-// file_put_contents("log.txt", "====== REQUEST ======\n" . print_r($data, true) . "\n\n====== RESPONSE ======\n" . $jsonResponse . "\n-----------------------------\n", FILE_APPEND);
 
 // Send response
 echo $jsonResponse;
