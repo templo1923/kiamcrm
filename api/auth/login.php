@@ -6,7 +6,8 @@ header("Access-Control-Allow-Methods: POST, OPTIONS");
 header('Content-Type: application/json');
 
 // Database connection
-include('../../include/conn.php');
+// Asegúrate de que este archivo carga la conexión $conn1 correctamente
+include('../../include/conn.php'); 
 
 // Get raw POST data
 $rawData = file_get_contents("php://input");
@@ -23,7 +24,7 @@ if (!isset($data['email'], $data['senha'], $data['chromeStoreID'])) {
 }
 
 $email         = $data['email'];
-$plain_password = $data['senha']; // Almacenamos la contraseña en texto plano para verificación segura
+$plain_password = $data['senha']; // Contraseña en texto plano para verificación segura
 $chromeStoreID = $data['chromeStoreID'];
 
 // Database check
@@ -36,7 +37,7 @@ if ($conn1->connect_error) {
     exit;
 }
 
-// Get user
+// Get user (usando sentencia preparada para prevenir inyección SQL)
 $stmt = $conn1->prepare("SELECT id, password, plan_expiry_date, max_devices FROM users WHERE email = ? AND status= 1");
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -45,7 +46,7 @@ $result = $stmt->get_result();
 if ($result->num_rows !== 1) {
     echo json_encode([
         "success" => false,
-        "message" => "User not found",
+        "message" => "User not found or inactive",
         "msg_id"  => "user_login_notFund"
     ]);
     exit;
@@ -54,10 +55,10 @@ if ($result->num_rows !== 1) {
 $user = $result->fetch_assoc();
 
 // INICIO DE LA CORRECCIÓN DE SEGURIDAD CRÍTICA
-
-// Verify password securely using password_verify()
+// ¡CRÍTICO! Usar password_verify() para verificar el hash Bcrypt almacenado
+// Si el hash en la DB es SHA-1 (como estaba antes), esto fallará. 
+// Es OBLIGATORIO migrar los hashes de la tabla `users` a Bcrypt.
 if (!password_verify($plain_password, $user['password'])) {
-    // Si la verificación falla, salimos.
     echo json_encode([
         "success" => false,
         "message" => "Incorrect password",
@@ -65,7 +66,6 @@ if (!password_verify($plain_password, $user['password'])) {
     ]);
     exit;
 }
-
 // FIN DE LA CORRECCIÓN DE SEGURIDAD CRÍTICA
 
 // Check expiry
@@ -79,7 +79,7 @@ if ($user['plan_expiry_date'] < $today) {
     exit;
 }
 
-// Device check
+// Device check (Lógica actual mantenida)
 $deviceCheck = $conn1->prepare("SELECT id FROM user_devices WHERE user_id = ? AND chrome_store_id = ?");
 $deviceCheck->bind_param("is", $user['id'], $chromeStoreID);
 $deviceCheck->execute();
@@ -111,7 +111,7 @@ if ($deviceResult->num_rows === 0) {
 // Generate token
 $token = bin2hex(random_bytes(16));
 
-// Save token
+// Save token (usando sentencia preparada)
 $updateToken = $conn1->prepare("UPDATE users SET token = ? WHERE id = ?");
 $updateToken->bind_param("si", $token, $user['id']);
 $updateToken->execute();
