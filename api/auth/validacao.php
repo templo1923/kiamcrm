@@ -68,7 +68,7 @@ if ($result->num_rows > 0) {
                 "funnel" => true,
                 "schedule" => true,
                 "check_sp" => true,
-                "multiagent" => false, // Apagamos esto explícitamente
+                "multiagent" => true, // Apagamos esto explícitamente
                 "audio_transcription" => true
             ]
         ],
